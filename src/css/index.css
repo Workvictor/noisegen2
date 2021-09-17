@@ -1,0 +1,47 @@
+body {
+  background-color: black;
+  color: beige;
+  margin: 0;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  user-select: none;
+}
+
+#screen {
+  background-color: black;
+}
+
+#controls {
+  background-color: black;
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0px);
+  transition: all 200ms ease-in-out;
+}
+
+#controls.hidden {
+  transform: translateX(-500px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#controls .label {
+  display: flex;
+  flex-direction: column;
+}
+
+#controls_view_toggle_btn {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

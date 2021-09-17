@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>noisegen2</title>
+  </head>
+  <body>
+    <canvas id="screen" class="layer"></canvas>
+    <div class="layer">
+      <div id="controls">
+        <div><button data-action="2">fold</button> Settings</div>
+        <p>
+          <label class="label">
+            <span>period x: <output data-id="px"></output></span>
+            <input data-id="px" type="range" min="1" max="10" />
+          </label>
+        </p>
+        <p>
+          <label class="label">
+            <span>period y: <output data-id="py"></output></span>
+            <input data-id="py" type="range" min="1" max="10" />
+          </label>
+        </p>
+        <p>
+          <label class="label">
+            <span>slides total: <output data-id="st"></output></span>
+            <input data-id="st" type="range" min="4" max="24" />
+          </label>
+        </p>
+        <p>
+          <button data-action="0">generate</button>
+          <button data-action="1">stop</button>
+          <div>progress: <output data-id="prg"></output>%</div>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
