@@ -1,5 +1,4 @@
 const TerserPlugin = require('terser-webpack-plugin');
-// const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const config = require('./webpack.config');
 
 const mode = 'production';
@@ -46,7 +45,6 @@ module.exports = {
           },
         },
       }),
-      // new CssMinimizerPlugin(),
     ],
   },
 };

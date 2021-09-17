@@ -5,11 +5,13 @@ export const enum EBtnAction {
 }
 
 export const enum EDataID {
-  period_x = 'px',
-  period_y = 'py',
+  period = 'per',
+  gen_alpha = 'ga',
+  gen_void = 'gv',
   gen_index = 'gi',
   gen_running = 'gr',
   gen_stopped = 'gs',
+  gen_radius = 'rad',
   gen_progress_current = 'prg',
   raf_sample_rate = '1',
   raf_subscribers = '2',
@@ -27,9 +29,11 @@ declare global {
     id?: EDataID;
   }
   type TAppData = {
-    [EDataID.period_x]: number;
-    [EDataID.period_y]: number;
+    [EDataID.period]: number;
+    [EDataID.gen_alpha]: number;
+    [EDataID.gen_void]: number;
     [EDataID.gen_index]: number;
+    [EDataID.gen_radius]: number;
     [EDataID.gen_running]: boolean;
     [EDataID.gen_stopped]: boolean;
     /** Range [0, 1] */
@@ -54,5 +58,6 @@ declare global {
     draw_context: CRC2D;
     inputs: HTMLInputElement[];
     output: HTMLOutputElement[];
+    controls: HTMLElement;
   }
 }

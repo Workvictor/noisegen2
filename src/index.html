@@ -7,20 +7,34 @@
     <title>noisegen2</title>
   </head>
   <body>
-    <canvas id="screen" class="layer"></canvas>
     <div class="layer">
       <div id="controls">
-        <div><button data-action="2">fold</button> Settings</div>
+        <div>
+          <button data-action="2" id="fold_btn">hide</button> settings
+          <button data-action="2" id="open_btn">settings</button>
+        </div>
         <p>
           <label class="label">
-            <span>period x: <output data-id="px"></output></span>
-            <input data-id="px" type="range" min="1" max="10" />
+            <span>radius: <output data-id="rad"></output></span>
+            <input data-id="rad" type="range" min="1" max="8" />
           </label>
         </p>
         <p>
           <label class="label">
-            <span>period y: <output data-id="py"></output></span>
-            <input data-id="py" type="range" min="1" max="10" />
+            <span>period: <output data-id="per"></output></span>
+            <input data-id="per" type="range" min="1" max="10" />
+          </label>
+        </p>
+        <p>
+          <label class="label">
+            <span>alpha: <output data-id="ga"></output></span>
+            <input data-id="ga" type="range" min="0.025" max="0.7" step="0.025" />
+          </label>
+        </p>
+        <p>
+          <label class="label">
+            <span>void alpha: <output data-id="gv"></output></span>
+            <input data-id="gv" type="range" min="0.025" max="1" step="0.025" />
           </label>
         </p>
         <p>
@@ -36,5 +50,6 @@
         </p>
       </div>
     </div>
+    <canvas id="screen" class="layer"></canvas>
   </body>
 </html>

@@ -5,26 +5,27 @@ body {
   font-family: 'Fira Code', 'Courier New', Courier, monospace;
   font-size: 12px;
   user-select: none;
+  background-image: url(../img/nebula.jpg);
+  background-size: cover;
 }
 
 #screen {
-  background-color: black;
+  pointer-events: none;
 }
 
 #controls {
-  background-color: black;
+  background-color: hsla(0, 0%, 0%, 0.6);
   padding: 16px;
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(0px);
   transition: all 200ms ease-in-out;
+  filter: drop-shadow(0px 0px 9px rgba(11, 178, 255, 0.75));
 }
 
 #controls.hidden {
-  transform: translateX(-500px);
-  opacity: 0;
-  pointer-events: none;
+  transform: translateX(-100%);
 }
 
 #controls .label {
@@ -32,10 +33,19 @@ body {
   flex-direction: column;
 }
 
-#controls_view_toggle_btn {
-  position: relative;
-  top: 0;
-  left: 0;
+#open_btn {
+  visibility: hidden;
+  position: absolute;
+  right: 0;
+  opacity: 0;
+  transform: translateX(-200%);
+  transition: transform 200ms ease-in-out;
+}
+
+#controls.hidden #open_btn {
+  visibility: visible;
+  transform: translateX(100%);
+  opacity: 1;
 }
 
 .layer {

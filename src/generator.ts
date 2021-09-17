@@ -4,8 +4,16 @@ import { create_canvas } from './utils/canvas';
 import { clamp } from './utils/clamp';
 import { app_view } from './view';
 
-function random() {
-  return `hsl(0,0%,${Math.random() * 100}%)`;
+function hsla(l = 0, a = 0.5) {
+  return `hsla(0,0%,${l}%,${a})`;
+}
+
+function solid_black() {
+  return hsla(0, app_data[EDataID.gen_void]);
+}
+
+function random_solid() {
+  return hsla(Math.random() * 100, app_data[EDataID.gen_alpha]);
 }
 
 function on_complete() {
@@ -13,39 +21,49 @@ function on_complete() {
 }
 
 function gen_step() {
-  const slide_lenght = app_view.screen.width * app_view.screen.height;
-  const total = slide_lenght * app_data[EDataID.slides_total];
-  const complete = app_data[EDataID.gen_index] === total;
-  const slide_index = clamp(
-    Math.floor(app_data[EDataID.gen_index] / slide_lenght),
-    0,
-    app_data[EDataID.slides_total] - 1
-  );
+  let local_index = app_data[EDataID.gen_index];
+  let local_progress = app_data[EDataID.gen_progress_current];
+  const slides = app_data[EDataID.slides_list];
+  const period = app_data[EDataID.period];
+  const gen_radius = app_data[EDataID.gen_radius];
+  const slides_total = app_data[EDataID.slides_total];
+  const slide_width = app_view.screen.width;
+  const slide_height = app_view.screen.height;
+  const slide_lenght = slide_width * slide_height;
+  const total = slide_lenght * slides_total;
+  const complete = local_index >= total;
+  const slide_index = clamp(Math.floor(local_index / slide_lenght), 0, slides_total - 1);
 
-  if (!app_data[EDataID.slides_list][slide_index]) {
-    app_data[EDataID.slides_list].push(create_canvas(app_view.screen.width, app_view.screen.height)!);
+  if (!slides[slide_index]) slides.push(create_canvas(slide_width, slide_height));
+
+  const slide = slides[slide_index];
+  const x = local_index % slide_width;
+  const y = Math.floor((local_index - x) / slide_width) % slide_height;
+
+  if (y % period === 0) {
+    slide.fillStyle = random_solid();
+    slide.fillRect(x, y, gen_radius, gen_radius);
+  }
+  if (y % period !== 0 && x === 0) {
+    slide.fillStyle = solid_black();
+    slide.fillRect(x, y, slide_width, gen_radius);
+    local_progress = clamp(local_index / total, 0, 1);
   }
 
-  const slide = app_data[EDataID.slides_list][slide_index];
-  const x = app_data[EDataID.gen_index] % app_view.screen.width;
-  const y = Math.floor((app_data[EDataID.gen_index] - x) / app_view.screen.width) % app_view.screen.height;
+  local_index += gen_radius;
 
-  if (y % app_data[EDataID.period_y] === 0 && x % app_data[EDataID.period_x] === 0) {
-    slide.fillStyle = random();
-    slide.fillRect(x, y, 1, 1);
-    app_data[EDataID.gen_progress_current] = clamp(app_data[EDataID.gen_index] / total, 0, 1);
+  if (local_index > total) {
+    local_index = total;
+    local_progress = 1;
   }
 
-  if (complete) {
-    app_data[EDataID.gen_index] = total;
-  }
-
-  app_data[EDataID.gen_index]++;
+  app_data[EDataID.gen_index] = local_index;
+  app_data[EDataID.gen_progress_current] = local_progress;
 
   return complete;
 }
 
-function gen_run() {
+function gen_run_loop() {
   const exit_time = Date.now() + 1000 / 60;
   let is_complete = false;
   app_data[EDataID.gen_running] = true;
@@ -59,26 +77,28 @@ function gen_run() {
   }
 
   if (is_complete) return on_complete();
-  requestAnimationFrame(gen_run);
+  requestAnimationFrame(gen_run_loop);
+}
+
+export function gen_stop() {
+  app_data[EDataID.gen_stopped] = true;
+  app_data[EDataID.gen_index] = 0;
+  app_data[EDataID.gen_progress_current] = 0;
+}
+
+export function gen_start() {
+  app_data[EDataID.gen_index] = 0;
+  app_data[EDataID.gen_stopped] = false;
+  app_data[EDataID.slides_list].forEach(slide => {
+    slide.clearRect(0, 0, slide.canvas.width, slide.canvas.height);
+  });
+  if (app_data[EDataID.gen_running]) return;
+  gen_run_loop();
 }
 
 export function gen_init() {
   app_data[EDataID.gen_index] = 0;
   app_data[EDataID.gen_running] = false;
-  app_data[EDataID.gen_stopped] = false;
-}
-
-export function gen_stop() {
   app_data[EDataID.gen_stopped] = true;
-  app_data[EDataID.slides_list].forEach(slide => {
-    slide.clearRect(0, 0, slide.canvas.width, slide.canvas.height);
-  });
-}
-
-export function gen_start() {
-  gen_stop();
-  app_data[EDataID.gen_index] = 0;
-  app_data[EDataID.gen_stopped] = false;
-  if (app_data[EDataID.gen_running]) return;
-  gen_run();
+  window.addEventListener('resize', gen_stop);
 }
