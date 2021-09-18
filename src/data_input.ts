@@ -31,11 +31,14 @@ export function data_input_init() {
     if (!input.dataset.id) return;
     if (!(input.dataset.id in app_data)) return;
     input.value = String(app_data[input.dataset.id]);
+  });
 
-    input.addEventListener('input', () => {
+  addEventListener('input', e => {
+    if (e.target instanceof HTMLInputElement) {
+      const input = e.target;
       if (!input.dataset.id) return;
       if (!(input.dataset.id in data_bind_map)) return;
       data_bind_map[input.dataset.id](input.value);
-    });
+    }
   });
 }

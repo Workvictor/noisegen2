@@ -53,8 +53,6 @@ declare global {
   type CRC2D = CanvasRenderingContext2D;
   interface AppView {
     screen: Canvas;
-    buttons: HTMLButtonElement[];
-    action_btn: HTMLButtonElement[];
     draw_context: CRC2D;
     inputs: HTMLInputElement[];
     output: HTMLOutputElement[];

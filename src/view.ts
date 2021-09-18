@@ -7,10 +7,8 @@ function setup_screen() {
 }
 
 export function view_init() {
-  app_view.buttons = Array.from(document.querySelectorAll('button'));
   app_view.inputs = Array.from(document.querySelectorAll('input'));
   app_view.output = Array.from(document.querySelectorAll('output'));
-  app_view.action_btn = app_view.buttons.filter(btn => !!btn.dataset.action);
   app_view.screen = document.querySelector<Canvas>('#screen')!;
   app_view.draw_context = app_view.screen.getContext('2d')!;
   app_view.controls = document.querySelector<HTMLElement>('#controls')!;
